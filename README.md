@@ -1,5 +1,5 @@
 # SlipPoint
-    1. 添加依赖 
+   1. 添加依赖 
     -------  
         
 
@@ -19,7 +19,8 @@ Step 2. Add the dependency
 	        implementation 'com.github.MrJoeyBoey:SlipPoint:1.1'
 	}
   
-    2. 使用方法 
+  
+   2. 使用方法 
     -------  
     I.在.xml文件中添加
     
