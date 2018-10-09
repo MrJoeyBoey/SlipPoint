@@ -2,16 +2,12 @@ package com.example.joey.slippoint;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 public class SlipPoint extends LinearLayout {
@@ -22,9 +18,10 @@ public class SlipPoint extends LinearLayout {
     private LinearLayout layout;
     private View view;
     private Boolean isAutoSlide;
-    private int delayTime;
+    private long delayTime;
     private int currentItem;
     private int pointSize;
+    private ViewPager viewPager;
     private Handler handler=new Handler();
 
     public SlipPoint(Context context) {
@@ -54,7 +51,9 @@ public class SlipPoint extends LinearLayout {
         layout=view.findViewById(R.id.slippoint_layout);
         pointNum=1;
         isAutoSlide=false;
-        currentItem=1;
+        currentItem=0;
+        delayTime=2000;
+        viewPager=null;
     }
 
     public SlipPoint setNum(int pointNum){
@@ -67,7 +66,7 @@ public class SlipPoint extends LinearLayout {
         return this;
     }
 
-    public SlipPoint setDelayTime(int delayTime){
+    public SlipPoint setDelayTime(long delayTime){
         this.delayTime=delayTime;
         return this;
     }
@@ -94,7 +93,7 @@ public class SlipPoint extends LinearLayout {
 
     private void startAutoSlide(){
         handler.removeCallbacks(task);
-        handler.postDelayed(task,delayTime);
+        handler.postDelayed(task,0);
     }
 
     private final Runnable task = new Runnable() {
@@ -105,6 +104,11 @@ public class SlipPoint extends LinearLayout {
                     layout.getChildAt(i).setEnabled(false);
                 }
                 layout.getChildAt(currentItem).setEnabled(true);
+
+                if(viewPager!=null){
+                    viewPager.setCurrentItem(currentItem);
+                }
+
                 if(currentItem!=pointNum-1){
                     currentItem ++;
                 }else {
@@ -114,5 +118,32 @@ public class SlipPoint extends LinearLayout {
             }
         }
     };
+
+    public void bindViewPager(ViewPager viewPager, PagerAdapter adapter) {
+        this.viewPager=viewPager;
+
+        pointNum=adapter.getCount();
+
+        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                currentItem = i;
+                for(int j=0;j<pointNum;j++){
+                    layout.getChildAt(j).setEnabled(false);
+                }
+                layout.getChildAt(currentItem).setEnabled(true);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+            }
+        });
+
+    }
 
 }
