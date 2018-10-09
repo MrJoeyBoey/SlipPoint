@@ -22,6 +22,7 @@ Step 2. Add the dependency
   
    2. 使用方法 
     -------  
+    
     I.在.xml文件中添加
     
     <com.example.slippointlibrary.SlipPoint
